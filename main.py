@@ -1,8 +1,8 @@
+import sys
 from weather_data_handler import WeatherDataHandler
 from yearly_weather_analyzer import YearlyWeatherAnalyzer
 from monthly_weather_analyzer import MonthlyWeatherAnalyzer
 from monthly_weather_visualizer import MonthlyWeatherVisualizer
-import sys
   
 def yearly_data(year):
     data_handler = WeatherDataHandler()
