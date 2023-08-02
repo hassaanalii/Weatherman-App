@@ -4,7 +4,7 @@ class YearlyWeatherAnalyzer:
         pass
 
     def analyzer(self, data_list):
-    # Initialize max_temperature and min_temperature to reasonable starting values
+        # Initialize max_temperature and min_temperature to reasonable starting values
         max_temperature = float('-inf')
         pkt_max_temp = ''
 
@@ -21,7 +21,6 @@ class YearlyWeatherAnalyzer:
                 continue
 
             for day_data in month_data:
-
                 if day_data['Max TemperatureC'] == '' or day_data['Min TemperatureC'] == '' or day_data['Max Humidity'] == '':
                     continue
 
@@ -37,7 +36,6 @@ class YearlyWeatherAnalyzer:
                         pkt_max_temp = day_data['PKST']
                     else:
                         pkt_max_temp = "Pkt not available"
-                
 
                 if min_temp < min_temperature:
                     min_temperature = min_temp
@@ -46,7 +44,7 @@ class YearlyWeatherAnalyzer:
                     elif 'PKST' in day_data:
                         pkt_min_temp = day_data['PKST']
                     else:
-                        pkt_min_temp = "Pkt not available"    
+                        pkt_min_temp = "Pkt not available"
 
                 if humidity > max_humidity:
                     max_humidity = humidity
@@ -59,8 +57,8 @@ class YearlyWeatherAnalyzer:
                     else:
                         pkt_humidity = "Pkt not available"
 
-        return max_temperature, pkt_max_temp, min_temperature, pkt_min_temp, max_humidity, pkt_humidity, min_humidity, mean_humidity
-
+        return (max_temperature, pkt_max_temp, min_temperature, pkt_min_temp,
+                max_humidity, pkt_humidity, min_humidity, mean_humidity)
 
     def percentage_humidity(self, mean_humidity, max_humidity, min_humidity):
         try:
@@ -68,3 +66,4 @@ class YearlyWeatherAnalyzer:
             return percentage_humidity
         except ZeroDivisionError:
             return False
+

@@ -4,8 +4,8 @@ class MonthlyWeatherAnalyzer:
 
     def analyzer(self, month, key):
         if self.data_list[month - 1] is None:
-            return  
-        
+            return
+
         value_count = 0
         sum = 0
         for day_data in self.data_list[month - 1]:
@@ -14,7 +14,7 @@ class MonthlyWeatherAnalyzer:
             else:
                 value_count += 1
                 sum += float(day_data[key])
-        
+
         return self.calculate_average(sum, value_count)
 
     def calculate_average(self, sum, count):

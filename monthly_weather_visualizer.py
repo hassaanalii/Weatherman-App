@@ -69,5 +69,3 @@ class MonthlyWeatherVisualizer:
 
         print(date_bar)
         print("\n")
-
-
