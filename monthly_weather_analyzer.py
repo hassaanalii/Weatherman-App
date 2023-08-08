@@ -2,7 +2,7 @@ class MonthlyWeatherAnalyzer:
     def __init__(self, data_list):
         self.data_list = data_list
 
-    def analyzer(self, month, key):
+    def monthly_weather_analyzer(self, month, key):
         if self.data_list[month - 1] is None:
             return
 

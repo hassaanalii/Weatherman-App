@@ -10,23 +10,23 @@ class MonthlyWeatherVisualizer:
         else:
             return True
 
-    def visualizer(self, month, bool_bonus):
+    def monthly_weather_visualizer(self, month, bool_bonus):
         if self.data_list[month - 1] is None:
             return "No data is available for this month"
 
         # Check if the attribute is PKT or PKST
         check = self.PKT_PKST(month)
-        attribute = "PKT"
+        date_format = "PKT"
         if check:
-            attribute = "PKST"
+            date_format = "PKST"
 
         print("\n")
         for day_data in self.data_list[month - 1]:
             if day_data['Max TemperatureC'] == '' or day_data['Min TemperatureC'] == '':
                 continue
 
-            if attribute in day_data:
-                date = day_data[attribute]
+            if date_format in day_data:
+                date = day_data[date_format]
                 parsed_date = datetime.strptime(date, '%Y-%m-%d')
                 day = parsed_date.day
 

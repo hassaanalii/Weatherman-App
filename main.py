@@ -1,53 +1,48 @@
 import sys
+
 from weather_data_handler import WeatherDataHandler
 from yearly_weather_analyzer import YearlyWeatherAnalyzer
 from monthly_weather_analyzer import MonthlyWeatherAnalyzer
 from monthly_weather_visualizer import MonthlyWeatherVisualizer
 
 
-def yearly_data(year):
+def get_yearly_data(year):
     data_handler = WeatherDataHandler()
     monthly_data_list = data_handler.list_initialization(year)
 
     yearly_analyzer = YearlyWeatherAnalyzer()
-    (max_temperature, pkt_max_temp, min_temperature, pkt_min_temp,
-     max_humidity, pkt_humidity, min_humidity, mean_humidity) = yearly_analyzer.analyzer(monthly_data_list)
-    humidity = yearly_analyzer.percentage_humidity(mean_humidity, max_humidity, min_humidity)
+    yearly_data_dict = yearly_analyzer.analyzer(monthly_data_list)
 
-    print("\nHighest:", max_temperature, "on", pkt_max_temp)
-    print("Lowest:", min_temperature, "on", pkt_min_temp)
+    humidity = yearly_analyzer.percentage_humidity(yearly_data_dict['mean_humidity'], yearly_data_dict['max_humidity'], yearly_data_dict['min_humidity'])
 
-    if humidity:
-        print("Humidity:", humidity, f"% on", pkt_humidity)
-    else:
-        print("Max or Min humidity is zero")
+    return yearly_data_dict, humidity
+   
 
-
-def monthly_data(year, month):
+def monthly_temperature_analyzer(year, month):
     if 1 <= month <= 12:
         data_handler = WeatherDataHandler()
         monthly_data_list = data_handler.list_initialization(year)
         monthly_analyzer = MonthlyWeatherAnalyzer(monthly_data_list)
 
-        average_highest_temp = monthly_analyzer.analyzer(month, 'Max TemperatureC')
-        average_lowest_temp = monthly_analyzer.analyzer(month, 'Min TemperatureC')
-        average_mean_humidity = monthly_analyzer.analyzer(month, 'Mean Humidity')
+        average_highest_temp = monthly_analyzer.monthly_weather_analyzer(month, 'Max TemperatureC')
+        average_lowest_temp = monthly_analyzer.monthly_weather_analyzer(month, 'Min TemperatureC')
+        average_mean_humidity = monthly_analyzer.monthly_weather_analyzer(month, ' Mean Humidity')
 
-        print(f"\nHighest Average: {average_highest_temp}C")
-        print(f"Lowest Average: {average_lowest_temp}C")
-        print(f"Average Mean Humidity: {average_mean_humidity}%")
+        print("\nHighest Average: " + str(average_highest_temp) + "C")
+        print("Lowest Average: " + str(average_lowest_temp) + "C")
+        print("Average Mean Humidity: " + str(average_mean_humidity) + "%")
     else:
         print("\nInvalid month value for monthly data. Month should be between 1 and 12.\n")
 
 
-def visualizer(year, month):
+def monthly_temperature_visualizer(year, month):
     if 1 <= month <= 12:
         data_handler = WeatherDataHandler()
         monthly_data_list = data_handler.list_initialization(year)
         monthly_visualizer = MonthlyWeatherVisualizer(monthly_data_list)
-        monthly_visualizer.visualizer(month, False)
+        monthly_visualizer.monthly_weather_visualizer(month, False)
         print("\n\nBONUS TASK\n\n")
-        monthly_visualizer.visualizer(month, True)
+        monthly_visualizer.monthly_weather_visualizer(month, True)
 
     else:
         print("\nInvalid month value for visualizer. Month should be between 1 and 12.\n")
@@ -61,19 +56,28 @@ if __name__ == "__main__":
 
         # Module 1
         if command == '-e':
-            yearly_data(year)
+            yearly_data_dict, humidity = get_yearly_data(year)
+
+            print("\nHighest:", yearly_data_dict["max_temperature"], "on", yearly_data_dict['pkt_max_temp'])
+            print("Lowest:", yearly_data_dict['min_temperature'], "on", yearly_data_dict['pkt_min_temp'])
+
+            if humidity:
+                print("Humidity: {}% on {}".format(humidity, yearly_data_dict['pkt_humidity']))
+            else:
+                print("Humidity data not available for the year {}".format(year))
+
 
         elif command == '-a':
             temp_lst = year.split("/")
             year = int(temp_lst[0])
             month = int(temp_lst[1])
-            monthly_data(year, month)
+            monthly_temperature_analyzer(year, month)
 
         elif command == "-c":
             temp_lst = year.split("/")
-            year = int(temp_lst[0])
+            year = int(temp_lst[0])     
             month = int(temp_lst[1])
-            visualizer(year, month)
+            monthly_temperature_visualizer(year, month)
 
     elif len(sys.argv) == 8:
         year_month_c = sys.argv[3]
@@ -88,9 +92,19 @@ if __name__ == "__main__":
         year_a = int(temp_lst_a[0])
         month_a = int(temp_lst_a[1])
 
-        visualizer(year_c, month_c)
-        monthly_data(year_a, month_a)
-        yearly_data(year_e)
+        monthly_temperature_visualizer(year_c, month_c)
+        monthly_temperature_analyzer(year_a, month_a)
+
+
+        yearly_data_dict, humidity = get_yearly_data(year_e)
+
+        print("\nHighest:", yearly_data_dict['max_temperature'], "on", yearly_data_dict['pkt_max_temp'])
+        print("Lowest:", yearly_data_dict['min_temperature'], "on", yearly_data_dict['pkt_min_temp'])
+
+        if humidity:
+            print("Humidity: {}% on {}".format(humidity, yearly_data_dict['pkt_humidity']))
+        else:
+            print("Humidity data not available for the year {}".format(year_e))
 
     else:
         print("Invalid command!")

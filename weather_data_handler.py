@@ -20,6 +20,8 @@ class WeatherDataHandler:
                 return data_dict_list
         except FileNotFoundError:
             return None
+        # If the year entered is after 2016, the code might break because the data after 2016 is not available
+        # That is why FileNotFoundError exception is used
 
     def list_initialization(self, year):
         monthly_data_list = []
